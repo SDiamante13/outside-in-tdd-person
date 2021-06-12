@@ -1,29 +1,43 @@
-# Read Me First
-The following was discovered as part of building this project:
+# Person Search API
 
-* The original package name 'path.to.programming.outside-in-tdd-person' is invalid and this project uses 'path.to.programming.outsideintddperson' instead.
+## POST /person/search
 
-# Getting Started
+### Content Body:
 
-### Reference Documentation
-For further reference, please consider the following sections:
+```json
+{
+  "ssn": "111223333",
+  "firstName": "Elon",
+  "lastName": "Musk",
+  "dateOfBirth": "06/28/1971" 
+}  
+```
 
-* [Official Gradle documentation](https://docs.gradle.org)
-* [Spring Boot Gradle Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.5.1/gradle-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/2.5.1/gradle-plugin/reference/html/#build-image)
-* [Spring Web](https://docs.spring.io/spring-boot/docs/2.5.1/reference/htmlsingle/#boot-features-developing-web-applications)
-* [Spring Data JPA](https://docs.spring.io/spring-boot/docs/2.5.1/reference/htmlsingle/#boot-features-jpa-and-spring-data)
+### Response:
 
-### Guides
-The following guides illustrate how to use some features concretely:
+```json
+{
+  "ssn": "*****3333",
+  "firstName": "",
+  "lastName": "",
+  "dateOfBirth": "06/28/1971",
+  "address": {
+    "streetAddress": "123 Main St.",
+    "city": "Raleigh",
+    "state": "NC"
+  },
+  "email": "test@test.com",
+  "phoneNumber": "333-444-5555"
+}
+```
 
-* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
-* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
-* [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
-* [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
+Notes:
 
-### Additional Links
-These additional references should also help you:
+Datebase entries must have a timestamp & dob in EpochSecond
 
-* [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
+### Tools
+
+MockMvc style Feature Test with embedded H2 Database
+
+step down into unit tests to fix a line on the acceptance test
 
