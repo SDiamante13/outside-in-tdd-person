@@ -14,6 +14,7 @@ import path.to.programming.outsideintddperson.model.PersonRequest;
 import path.to.programming.outsideintddperson.model.PersonResponse;
 import path.to.programming.outsideintddperson.repository.PersonRepository;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,35 +35,36 @@ class PersonControllerTest {
             .lastName("Musk")
             .build();
 
-    Person person = Person.builder()
-            .firstName("Elon")
-            .lastName("Musk")
-            .build();
-
     @BeforeEach
     void setUp() {
-        List<Person> people = Arrays.asList(
-                Person.builder()
-                        .ssn("111223333")
-                        .firstName("Elon")
-                        .lastName("Musk")
-                        .build(),
-                Person.builder()
-                        .ssn("444556666")
-                        .firstName("Bruce")
-                        .lastName("Willis")
-                        .build()
-        );
-
-        Mockito.when(mockPersonRepository.findAll(any())).thenReturn(people);
+        Mockito.when(mockPersonRepository.findAll(any()))
+                .thenReturn(Arrays.asList(
+                        Person.builder()
+                                .ssn("111223333")
+                                .firstName("Elon")
+                                .lastName("Musk")
+                                .dateOfBirth(LocalDate.of(1971, 6, 28).toEpochDay())
+                                .build(),
+                        Person.builder()
+                                .ssn("444556666")
+                                .firstName("Bruce")
+                                .lastName("Willis")
+                                .dateOfBirth(LocalDate.of(1965, 7, 28).toEpochDay())
+                                .build()
+                ));
     }
 
     @Test
     void personSearch_callsRepositoryFindAll() {
+        Person personCriteria = Person.builder()
+                .firstName("Elon")
+                .lastName("Musk")
+                .build();
+
         ResponseEntity<PersonResponse> responseEntity = personController.personSearch(personRequest);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        Mockito.verify(mockPersonRepository).findAll(person);
+        Mockito.verify(mockPersonRepository).findAll(personCriteria);
     }
 
     @Test
@@ -73,6 +75,7 @@ class PersonControllerTest {
                 .ssn("*****3333")
                 .firstName("Elon")
                 .lastName("Musk")
+                .dateOfBirth("06/28/1971")
                 .build();
 
         assertThat(responseEntity.getBody()).isEqualTo(expectedPersonResponse);

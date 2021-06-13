@@ -9,6 +9,8 @@ import path.to.programming.outsideintddperson.model.PersonRequest;
 import path.to.programming.outsideintddperson.model.PersonResponse;
 import path.to.programming.outsideintddperson.repository.PersonRepository;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -39,11 +41,16 @@ public class PersonController {
                 .ssn(maskSSN(people.get(0).getSsn()))
                 .firstName(people.get(0).getFirstName())
                 .lastName(people.get(0).getLastName())
-                .dateOfBirth(people.get(0).getDateOfBirth() != null ? Long.toString(people.get(0).getDateOfBirth()) : null)
+                .dateOfBirth(formatDateOfBirth(people.get(0).getDateOfBirth()))
                 .address(people.get(0).getAddress())
                 .email(people.get(0).getEmail())
                 .phoneNumber(people.get(0).getPhoneNumber())
                 .build();
+    }
+
+    private String formatDateOfBirth(Long dateOfBirth) {
+        return LocalDate.ofEpochDay(dateOfBirth)
+                .format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
     }
 
     private String maskSSN(String ssn) {
